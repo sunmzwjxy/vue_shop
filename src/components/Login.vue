@@ -12,10 +12,7 @@
                 ref="ruleForm"
             >
                 <el-form-item prop="username">
-                    <el-input
-                        prefix-icon="iconfont icon-people"
-                        v-model="loginform.username"
-                    ></el-input>
+                    <el-input prefix-icon="iconfont icon-people" v-model="loginform.username"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input
@@ -25,9 +22,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item class="btns">
-                    <el-button type="primary" @click="validateForm"
-                        >Login</el-button
-                    >
+                    <el-button type="primary" @click="validateForm">Login</el-button>
                     <el-button type="info" @click="resetForm">Reset</el-button>
                 </el-form-item>
             </el-form>
@@ -41,8 +36,8 @@ export default {
     data() {
         return {
             loginform: {
-                username: '',
-                password: ''
+                username: 'Ada',
+                password: '123456'
             },
             loginformrules: {
                 username: [
@@ -78,7 +73,11 @@ export default {
         validateForm() {
             this.$refs.ruleForm.validate(async valid => {
                 if (valid) {
-                    const result = await this.$axios.get('users')
+                    const data = {
+                        username: this.loginform.username,
+                        password: this.loginform.password
+                    }
+                    const result = await this.$axios.post('users/login', data)
                     if (result.status === 200) {
                         this.$message({
                             showClose: true,
@@ -86,7 +85,10 @@ export default {
                             type: 'success'
                         })
                         // set token in sessionStorage
-                        window.sessionStorage.setItem('token', 'token value')
+                        window.sessionStorage.setItem(
+                            'token',
+                            result.data.token
+                        )
                         // route jump
                         this.$router.push('/home')
                     } else {
