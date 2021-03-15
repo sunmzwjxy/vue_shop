@@ -52,16 +52,25 @@ export default {
     },
     methods: {
         async getmenulist() {
-            const { status, data: res } = await this.$axios.get('/menus')
-            if (status !== 200) {
+            const res = await this.$axios.get('/menus')
+            if (res.status !== 200) {
                 this.$message({
                     showClose: true,
                     message: 'Load menu list data failed from Server!',
                     type: 'error'
                 })
                 return
+            } else {
+                if (res.data.status === 403) {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.msg,
+                        type: 'error'
+                    })
+                    return
+                }
             }
-            this.data = res
+            this.data = res.data
         },
         getactivedmenu() {
             this.menuactive = this.$route.path

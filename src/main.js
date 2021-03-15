@@ -6,6 +6,7 @@ import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 
+// 配置请求的根路径
 axios.defaults.baseURL = 'http://localhost:3000/'
 // axios.defaults.headers.common.Authorization = AUTH_TOKEN
 axios.defaults.headers.post['Content-Type'] =
@@ -26,6 +27,7 @@ axios.interceptors.request.use(
 )
 
 Vue.config.productionTip = false
+// 挂载axios到Vue上
 Vue.prototype.$axios = axios
 
 new Vue({

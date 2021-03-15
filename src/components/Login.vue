@@ -35,10 +35,12 @@ export default {
     name: 'login',
     data() {
         return {
+            // 登录表单的数据对象
             loginform: {
                 username: 'Ada',
                 password: '123456'
             },
+            // 表单的验证规则对象
             loginformrules: {
                 username: [
                     {

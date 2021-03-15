@@ -59,12 +59,14 @@ const routes = [
 const router = new VueRouter({
     routes
 })
-
+// 为路由对象 添加 beforeEach 导航守卫
 router.beforeEach((to, from, next) => {
+    // 如果用户访问的登录页面，直接放行
     if (to.path === '/login') {
         next()
     } else {
         const tokenstr = window.sessionStorage.getItem('token')
+        // 如果没有token，强制跳转到login页面
         if (!tokenstr) return next('/login')
         next()
     }
