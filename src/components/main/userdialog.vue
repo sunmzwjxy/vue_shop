@@ -1,9 +1,9 @@
 <template>
     <div>
-        <el-dialog title="添加用户" :visible.sync="dialogVisible" width="50%" @close="handleClose">
+        <el-dialog title="添加用户" :visible.sync="copyDialogVisable" :close-on-click-modal="false" width="50%" @close="handleClose">
             <el-form label-width="70px" :model="addform" :rules="addformrules" ref="addruleFormref">
                 <el-form-item label="用户" prop="username">
-                    <el-input v-model="addform.username">"name"</el-input>
+                    <el-input v-model="addform.username" :disabled="!isAdd">"name"</el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="addform.password" type="password"></el-input>
@@ -28,7 +28,8 @@
 export default {
     name: 'userdlg',
     props: {
-        dialogVisible: Boolean
+        // 父组件帮从兄弟组件传来的值
+        // dialogVisible: Boolean
     },
     data() {
         // 验证邮箱地址
@@ -54,10 +55,14 @@ export default {
         }
         return {
             addform: {
+                id: '1',
                 username: '',
                 password: '',
                 mail: '',
-                phone: ''
+                phone: '',
+                type: 1,
+                role: 'Operater',
+                status: 0
             },
             addformrules: {
                 username: [
@@ -102,30 +107,87 @@ export default {
                     },
                     { validator: checkphone, trigger: 'blur' }
                 ]
-            }
+            },
+            copyDialogVisable: false,
+            isAdd: false
         }
+    },
+    watch: {
+        // 监听父组件值的变化
+        // dialogVisible(newVal, oldVal) {
+        // 使用一个copy来实现子组件更新父组件的值
+        // this.copyDialogVisable = newVal
+        // }
     },
     methods: {
         closedlg() {
-            // 同步更新父组件的值
-            this.$emit('update:dialogVisible', false)
+            this.copyDialogVisable = false
+            // this.$emit('DialogVisable', false) // update parent's value
         },
         submitdlg() {
             this.$refs.addruleFormref.validate(async valid => {
                 if (valid === true) {
-                    this.$emit('update:dialogVisible', false)
+                    this.copyDialogVisable = false
+                    // this.$emit('DialogVisable', false)
 
-                    const res = await this.$axios.put('/users/add', this.addform)
-                    console.log(res)
+                    const data = {
+                        id: this.addform.id,
+                        username: this.addform.username,
+                        password: this.addform.password,
+                        mail: this.addform.mail,
+                        phone: this.addform.phone,
+                        type: this.addform.type,
+                        role: this.addform.role,
+                        status: this.addform.status
+                    }
+                    let res = null
+                    if (this.isAdd === true) {
+                        res = await this.$axios.post('users/add', data)
+                    } else {
+                        res = await this.$axios.put('users/edit', data)
+                    }
+                    if (res.status === 200) {
+                        this.$message({
+                            showClose: true,
+                            message: 'Add or update user successful',
+                            type: 'success'
+                        })
+
+                        // Bus总线通知兄弟组件传值并刷新页面
+                        this.$bus.$emit('updateData', data)
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: 'Add or update user failed',
+                            type: 'error'
+                        })
+                    }
                 }
             })
         },
         handleClose() {
+            this.copyDialogVisable = false
+            // this.$emit('DialogVisable', false)
             this.$refs.addruleFormref.resetFields()
         }
+    },
+    mounted() {
+        this.$bus.$off('EditRow')
+        this.$bus.$on('EditRow', value => {
+            console.log(value)
+            this.copyDialogVisable = value.dialogvisale
+            this.isAdd = value.isAdd
+            this.addform = value.rowdata
+        })
+
+        this.$bus.$off('dialogvisale')
+        this.$bus.$on('dialogvisale', value => {
+            console.log(value)
+            this.copyDialogVisable = value.dialogvisale
+            this.isAdd = value.isAdd
+        })
     }
 }
 </script>
 
-<style>
-</style>
+<style></style>

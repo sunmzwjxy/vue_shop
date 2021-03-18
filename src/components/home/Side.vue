@@ -17,11 +17,7 @@
                         <i :class="iconsobj[item.id]"></i>
                         <span>{{ item.authName }}</span>
                     </template>
-                    <el-menu-item
-                        v-for="subitem in item.children"
-                        :key="subitem.id"
-                        :index="subitem.path"
-                    >
+                    <el-menu-item v-for="subitem in item.children" :key="subitem.id" :index="subitem.path">
                         <template slot="title">
                             <i class="el-icon-menu"></i>
                             <span>{{ subitem.authName }}</span>

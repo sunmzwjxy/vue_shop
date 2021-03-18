@@ -3,10 +3,7 @@
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
-<style lang="less" scope>
-</style>
+<style lang="less" scope></style>

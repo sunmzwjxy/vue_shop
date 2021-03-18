@@ -4,22 +4,12 @@
             <div class="avatar_box">
                 <img src="../assets/logo.png" alt />
             </div>
-            <el-form
-                label-width="0px"
-                class="login_form"
-                :model="loginform"
-                :rules="loginformrules"
-                ref="ruleForm"
-            >
+            <el-form label-width="0px" class="login_form" :model="loginform" :rules="loginformrules" ref="ruleForm">
                 <el-form-item prop="username">
                     <el-input prefix-icon="iconfont icon-people" v-model="loginform.username"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input
-                        prefix-icon="iconfont icon-lock"
-                        v-model="loginform.password"
-                        type="password"
-                    ></el-input>
+                    <el-input prefix-icon="iconfont icon-lock" v-model="loginform.password" type="password"></el-input>
                 </el-form-item>
                 <el-form-item class="btns">
                     <el-button type="primary" @click="validateForm">Login</el-button>
@@ -87,10 +77,7 @@ export default {
                             type: 'success'
                         })
                         // set token in sessionStorage
-                        window.sessionStorage.setItem(
-                            'token',
-                            result.data.token
-                        )
+                        window.sessionStorage.setItem('token', result.data.token)
                         // route jump
                         this.$router.push('/home')
                     } else {
