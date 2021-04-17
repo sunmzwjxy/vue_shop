@@ -6,6 +6,7 @@ import Side from '@/components/home/Side'
 import Userlist from '@/components/main/Userlist'
 import Rightlist from '@/components/main/Rightlist'
 import Welcome from '@/components/main/Welcome'
+import Rolelist from '@/components/main/Rolelist'
 
 // 重写路由的push方法,原因：在路由中添加了相同的路由。
 const routerPush = VueRouter.prototype.push
@@ -45,6 +46,14 @@ const routes = [
                 components: {
                     Side: Side,
                     Main: Rightlist
+                }
+            },
+            {
+                path: 'Rolelist',
+                name: 'Rolelist',
+                components: {
+                    Side: Side,
+                    Main: Rolelist
                 }
             }
         ]

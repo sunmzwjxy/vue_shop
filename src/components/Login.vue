@@ -78,6 +78,8 @@ export default {
                         })
                         // set token in sessionStorage
                         window.sessionStorage.setItem('token', result.data.token)
+                        window.sessionStorage.setItem('username', this.loginform.username)
+                        debugger
                         // route jump
                         this.$router.push('/home')
                     } else {

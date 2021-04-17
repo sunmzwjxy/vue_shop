@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import Bus from './assets/js/bus'
+import store from './store/index'
 import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
@@ -17,7 +18,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // 发送请求之前添加预处理(token)
 axios.interceptors.request.use(
     function(config) {
-        config.headers.Authorization = window.sessionStorage.getItem('token')
+        config.headers.Authorization = window.sessionStorage.getItem('token') + ' ' + window.sessionStorage.getItem('username')
         return config
     },
     function(error) {
@@ -34,5 +35,6 @@ Vue.prototype.$bus = Bus
 
 new Vue({
     router,
+    store,
     render: h => h(App)
 }).$mount('#app')
